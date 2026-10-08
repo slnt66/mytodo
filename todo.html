@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Steps">
+<meta name="theme-color" content="#eef1f4">
+<title>Steps</title>
+<style>
+:root{--bg:#eef1f4;--card:#fff;--ink:#14202b;--mute:#6b7a88;--line:#dbe1e7;--acc:#3347d6;--accbg:#e4e8fc;box-sizing:border-box}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1419;--card:#171e26;--ink:#e6ebf0;--mute:#8393a2;--line:#27313c;--acc:#8ea2ff;--accbg:#1f2745}}
+*,*:before,*:after{box-sizing:inherit}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.35 ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%;padding:env(safe-area-inset-top) 0 0}
+#app{max-width:640px;margin:0 auto;padding:18px 16px calc(96px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+h1{font-size:28px;line-height:1.15;margin:6px 0 4px;letter-spacing:-.02em;overflow-wrap:anywhere}
+.crumbs{display:flex;flex-wrap:wrap;gap:2px 6px;color:var(--mute);font-size:14px}
+.crumbs button{color:var(--mute);padding:4px 0;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line)}
+.sum{display:flex;align-items:baseline;gap:10px;margin:10px 0 18px;color:var(--mute);font-size:14px}
+.big{font-size:44px;font-weight:700;color:var(--acc);letter-spacing:-.03em;line-height:1}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 12px}
+ul{list-style:none;margin:0;padding:0}
+li ul{margin-left:11px;padding-left:12px;border-left:2px solid var(--line)}
+.row{display:flex;align-items:center;gap:6px;min-height:46px}
+.chev{width:22px;height:30px;color:var(--mute);font-size:13px;flex:none}
+.chev.hid{visibility:hidden}
+.chk{width:26px;height:26px;border-radius:50%;border:2px solid var(--mute);flex:none;display:grid;place-items:center;color:#fff;font-size:14px;font-weight:700}
+.done>.chk{background:var(--acc);border-color:var(--acc)}
+.dark-fix{}
+@media(prefers-color-scheme:dark){.done>.chk{color:#0f1419}}
+.t{flex:1;min-width:0;padding:8px 2px;overflow-wrap:anywhere;cursor:pointer}
+.done>.t{color:var(--mute);text-decoration:line-through;text-decoration-color:var(--line)}
+.cnt{font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+.ic{width:34px;height:34px;border-radius:10px;color:var(--mute);font-size:20px;flex:none}
+.ic:active{background:var(--accbg)}
+.bar{display:block;height:4px;border-radius:2px;background:var(--line);margin:0 0 8px 28px;overflow:hidden}
+.bar b{display:block;height:100%;background:var(--acc);border-radius:2px;transition:width .3s}
+.add{display:flex;gap:8px;margin:8px 0 6px}
+.add input{flex:1;min-width:0;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+.add button{background:var(--acc);color:#fff;border-radius:12px;padding:0 16px;font-weight:600}
+@media(prefers-color-scheme:dark){.add button{color:#0f1419}}
+.empty{color:var(--mute);padding:18px 4px;text-align:center}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+.stat b{display:block;font-size:30px;color:var(--acc);letter-spacing:-.03em;line-height:1.1}
+.stat span{font-size:13px;color:var(--mute)}
+h2{font-size:14px;font-weight:600;color:var(--mute);margin:18px 4px 6px}
+.log{padding:10px 0;border-top:1px solid var(--line)}
+.log:first-child{border-top:0}
+.log small{display:block;color:var(--mute);font-size:13px}
+.tools{display:flex;gap:16px;justify-content:center;margin-top:26px;color:var(--mute);font-size:14px}
+.tools button{text-decoration:underline;text-underline-offset:3px}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+nav button{flex:1;max-width:300px;padding:12px;border-radius:12px;font-weight:600;color:var(--mute)}
+nav button.on{background:var(--accbg);color:var(--acc)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav>
+  <button data-a="tab" data-i="goals" id="t1">Goals</button>
+  <button data-a="tab" data-i="done" id="t2">Done</button>
+</nav>
+<input type="file" id="file" accept="application/json" hidden>
+<script>
+const K='steps.v1';
+let S;
+try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
+if(!S||!S.n)S={n:{}};
+let tab='goals',focus=null,adding=null;
+
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const kids=id=>Object.values(S.n).filter(x=>(x.p||null)===(id||null)).sort((a,b)=>a.c-b.c);
+const leaves=id=>{const k=kids(id);return k.length?k.flatMap(x=>leaves(x.id)):[S.n[id]]};
+const isDone=n=>{const k=kids(n.id);return k.length?k.every(isDone):!!n.d};
+const prog=id=>{const l=leaves(id);return[l.filter(x=>x.d).length,l.length]};
+const path=n=>{const a=[];while(n.p&&S.n[n.p]){n=S.n[n.p];a.unshift(n.t)}return a.join(' › ')};
+
+function toggle(id){
+  const n=S.n[id],v=!isDone(n);
+  leaves(id).forEach(x=>{x.d=v;x.at=v?Date.now():null});
+}
+function add(p,t){
+  const id=Math.random().toString(36).slice(2,9);
+  S.n[id]={id,t,p:p||null,c:Date.now(),o:1,d:false,at:null};
+  if(p){S.n[p].d=false;S.n[p].at=null;S.n[p].o=1}
+}
+function del(id){kids(id).forEach(k=>del(k.id));delete S.n[id]}
+
+function row(n){
+  const k=kids(n.id),d=isDone(n),[a,b]=prog(n.id);
+  return `<li><div class="row${d?' done':''}">
+    <button class="chev${k.length?'':' hid'}" data-a="open" data-i="${n.id}" aria-label="Expand or collapse">${n.o?'▾':'▸'}</button>
+    <button class="chk" data-a="tog" data-i="${n.id}" aria-label="Mark done">${d?'✓':''}</button>
+    <span class="t" data-a="focus" data-i="${n.id}">${esc(n.t)}</span>
+    ${k.length?`<span class="cnt">${a}/${b}</span>`:''}
+    <button class="ic" data-a="add" data-i="${n.id}" aria-label="Add step">+</button>
+    <button class="ic" data-a="del" data-i="${n.id}" aria-label="Delete">×</button>
+  </div>${k.length?`<span class="bar"><b style="width:${Math.round(a/b*100)}%"></b></span>`:''}
+  ${k.length&&n.o?`<ul>${k.map(row).join('')}</ul>`:''}
+  ${adding===n.id?form(n.id,'New step'):''}</li>`;
+}
+const form=(p,ph)=>`<form class="add" data-p="${p||''}"><input placeholder="${ph}" enterkeyhint="done" autocomplete="off"><button>Add</button></form>`;
+
+function goals(){
+  const f=focus&&S.n[focus];
+  let h='';
+  if(f){
+    const crumbs=['<button data-a="focus" data-i="">All goals</button>'];
+    let c=f,anc=[];while(c.p&&S.n[c.p]){c=S.n[c.p];anc.unshift(c)}
+    anc.forEach(x=>crumbs.push(`<button data-a="focus" data-i="${x.id}">${esc(x.t)}</button>`));
+    const[a,b]=prog(f.id);
+    h+=`<div class="crumbs">${crumbs.join('<span>/</span>')}</div><h1>${esc(f.t)}</h1>
+    <div class="sum"><span class="big">${Math.round(a/b*100)}%</span><span>${a} of ${b} steps done</span></div>`;
+  }else{
+    const all=kids(null).flatMap(x=>leaves(x.id));
+    const a=all.filter(x=>x.d).length;
+    h+=`<h1>Goals</h1><div class="sum"><span class="big">${a}</span><span>${a===1?'step':'steps'} done so far</span></div>`;
+  }
+  const k=kids(f?f.id:null);
+  h+=k.length?`<div class="panel"><ul>${k.map(row).join('')}</ul></div>`
+    :`<div class="empty">${f?'No steps yet. Break this into smaller steps.':'No goals yet. Add your first goal below.'}</div>`;
+  return h+form(f?f.id:'',f?'Add a step':'Add a goal');
+}
+
+function doneTab(){
+  const l=Object.values(S.n).filter(n=>!kids(n.id).length&&n.d&&n.at).sort((a,b)=>b.at-a.at);
+  const day=t=>new Date(t).toDateString(),now=Date.now();
+  const today=l.filter(n=>day(n.at)===day(now)).length;
+  const week=l.filter(n=>now-n.at<6048e5).length;
+  let h=`<h1>Done</h1><div class="sum"><span>Everything you've finished, newest first.</span></div>
+  <div class="stats"><div class="stat"><b>${today}</b><span>today</span></div><div class="stat"><b>${week}</b><span>last 7 days</span></div><div class="stat"><b>${l.length}</b><span>total</span></div></div>`;
+  if(!l.length)h+='<div class="empty">Nothing yet. Finished steps will show up here.</div>';
+  let last='';
+  l.forEach(n=>{
+    const d=day(n.at);
+    if(d!==last){last=d;h+=`<h2>${new Date(n.at).toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'})}</h2>`}
+    h+=`<div class="log panel" style="border-radius:0;border:0;border-top:1px solid var(--line);background:none">${esc(n.t)}${path(n)?`<small>${esc(path(n))}</small>`:''}</div>`;
+  });
+  return h+`<div class="tools"><button data-a="exp">Export backup</button><button data-a="imp">Import backup</button></div>`;
+}
+
+function render(){
+  document.getElementById('app').innerHTML=tab==='goals'?goals():doneTab();
+  t1.className=tab==='goals'?'on':'';t2.className=tab==='done'?'on':'';
+  if(adding){const i=document.querySelector(`form[data-p="${adding}"] input`);i&&i.focus()}
+}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-a]');if(!b)return;
+  const a=b.dataset.a,i=b.dataset.i,n=S.n[i];
+  if(a==='tab'){tab=i;adding=null}
+  else if(a==='open')n.o=n.o?0:1;
+  else if(a==='tog')toggle(i);
+  else if(a==='focus'){focus=i||null;adding=null;scrollTo(0,0)}
+  else if(a==='add'){adding=adding===i?null:i;n.o=1}
+  else if(a==='del'){
+    const c=leaves(i).length>1?` and its ${kids(i).length} sub-steps`:'';
+    if(!confirm(`Delete "${n.t}"${c}?`))return;
+    del(i);if(focus&&!S.n[focus])focus=null;
+  }
+  else if(a==='exp'){
+    const u=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));
+    const l=document.createElement('a');l.href=u;l.download='steps-backup.json';l.click();return;
+  }
+  else if(a==='imp'){file.click();return}
+  save();render();
+});
+
+document.addEventListener('submit',e=>{
+  e.preventDefault();
+  const f=e.target,t=f.querySelector('input').value.trim();
+  if(!t)return;
+  const p=f.dataset.p||null;
+  add(p,t);save();render();
+  const i=document.querySelector(`form[data-p="${p||''}"] input`);i&&i.focus();
+});
+
+file.addEventListener('change',()=>{
+  const f=file.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{const d=JSON.parse(r.result);if(!d.n)throw 0;
+      if(confirm('Replace your current data with this backup?')){S=d;focus=null;adding=null;save();render()}
+    }catch(e){alert('This file is not a valid backup.')}
+    file.value='';
+  };
+  r.readAsText(f);
+});
+
+render();
+</script>
+</body>
+</html>
