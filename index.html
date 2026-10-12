@@ -1,31 +1,39 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Steps">
+<meta name="apple-mobile-web-app-title" content="Шаги">
 <meta name="theme-color" content="#eef1f4">
-<title>Steps</title>
+<title>Шаги</title>
 <style>
-:root{--bg:#eef1f4;--card:#fff;--ink:#14202b;--mute:#6b7a88;--line:#dbe1e7;--acc:#3347d6;--accbg:#e4e8fc;--onacc:#fff;box-sizing:border-box}
-@media(prefers-color-scheme:dark){:root{--bg:#0f1419;--card:#171e26;--ink:#e6ebf0;--mute:#8393a2;--line:#27313c;--acc:#8ea2ff;--accbg:#1f2745;--onacc:#0f1419}}
+:root{--bg:#eef1f4;--card:#fff;--ink:#14202b;--mute:#6b7a88;--line:#dbe1e7;--acc:#3347d6;--accbg:#e4e8fc;--onacc:#fff;
+--l1:#3b82f6;--l2:#16a37f;--l3:#d9a400;--l4:#f0731a;--l5:#e03e3e;
+--sh:0 1px 2px rgba(20,32,43,.05),0 10px 24px -14px rgba(20,32,43,.18);
+--ease:cubic-bezier(.3,.9,.3,1);box-sizing:border-box}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1419;--card:#171e26;--ink:#e6ebf0;--mute:#8393a2;--line:#27313c;--acc:#8ea2ff;--accbg:#1f2745;--onacc:#0f1419;
+--l1:#6aa3ff;--l2:#3cc8a0;--l3:#f0c030;--l4:#ff9248;--l5:#ff6b6b;
+--sh:0 1px 2px rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.6)}}
 *,*:before,*:after{box-sizing:inherit}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:16px/1.35 ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%;padding:env(safe-area-inset-top) 0 0}
 #app{max-width:640px;margin:0 auto;padding:14px 16px calc(96px + env(safe-area-inset-bottom))}
-button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
-button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;text-align:inherit}
+button,.stat,.row,.t,.chk{transition:background-color .18s,color .18s,border-color .18s,transform .18s var(--ease),box-shadow .18s,filter .18s}
+button:active{transform:scale(.94)}
+button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 h1{font-size:28px;line-height:1.15;margin:6px 0 4px;letter-spacing:-.02em;overflow-wrap:anywhere}
 .crumbs{display:flex;flex-wrap:wrap;gap:2px 6px;color:var(--mute);font-size:14px}
 .crumbs button{color:var(--mute);padding:4px 0;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line)}
 .sum{display:flex;align-items:baseline;gap:10px;margin:10px 0 18px;color:var(--mute);font-size:14px}
-.big{font-size:44px;font-weight:700;color:var(--acc);letter-spacing:-.03em;line-height:1}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 12px}
+.big{font-size:44px;font-weight:700;color:var(--acc);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 12px;box-shadow:var(--sh)}
 ul{list-style:none;margin:0;padding:0}
 li ul{margin-left:11px;padding-left:12px;border-left:2px solid var(--line)}
-.row{display:flex;align-items:center;gap:4px;min-height:46px}
-.chev{width:22px;height:30px;color:var(--mute);font-size:13px;flex:none}
+.row{display:flex;align-items:center;gap:3px;min-height:46px;border-radius:10px}
+.chev{width:20px;height:30px;color:var(--mute);font-size:13px;flex:none;text-align:center}
 .chev.hid{visibility:hidden}
 .chk{width:26px;height:26px;margin:0 2px;border-radius:50%;border:2px solid var(--mute);flex:none;display:grid;place-items:center;color:var(--onacc);font-size:14px;font-weight:700}
 .done>.chk{background:var(--acc);border-color:var(--acc)}
@@ -34,47 +42,103 @@ li ul{margin-left:11px;padding-left:12px;border-left:2px solid var(--line)}
 .tt{flex:1;min-width:0}
 .tt .t{display:block;padding:8px 2px 0}
 .tt small{display:block;padding:0 2px 8px;color:var(--mute);font-size:13px;overflow-wrap:anywhere}
-.cnt{font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
-.ic,.st{width:32px;height:34px;border-radius:10px;color:var(--mute);font-size:20px;flex:none}
-.ic:active,.st:active{background:var(--accbg)}
+.cnt{font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums;padding:0 2px}
+.ic,.st,.lvb{width:29px;height:34px;border-radius:10px;color:var(--mute);font-size:20px;flex:none;display:grid;place-items:center}
 .st.on{color:var(--acc)}
+.l0{--c:var(--mute)}.l1{--c:var(--l1)}.l2{--c:var(--l2)}.l3{--c:var(--l3)}.l4{--c:var(--l4)}.l5{--c:var(--l5)}
+.dot{display:block;width:14px;height:14px;border-radius:50%;background:var(--c);flex:none}
+.dot.l0{background:none;border:2px solid var(--mute)}
+.pick{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:2px 4px 12px 30px}
+.pk{width:28px;height:28px;border-radius:50%;background:var(--c);flex:none}
+.pk.l0{background:none;border:2px solid var(--mute)}
+.pk.on{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--c)}
+.pl{font-size:13px;color:var(--mute)}
 .bar{display:block;height:4px;border-radius:2px;background:var(--line);margin:0 0 8px 28px;overflow:hidden}
 .bar.full{margin:0 0 16px}
-.bar b{display:block;height:100%;background:var(--acc);border-radius:2px;transition:width .3s}
+.bar b{display:block;width:0;height:100%;background:var(--acc);border-radius:2px;transition:width .6s var(--ease)}
 .topbar{display:flex;gap:8px;align-items:center;margin-bottom:14px}
 .topbar .add{flex:1;margin:0}
-.sb{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;color:var(--mute);flex:none}
+.sb{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;color:var(--mute);flex:none;box-shadow:var(--sh)}
 .sb.on{color:var(--acc);background:var(--accbg);border-color:transparent}
 .add{display:flex;gap:8px;margin:8px 0 6px}
-.add input,.sp input{flex:1;min-width:0;width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 12px;-webkit-appearance:none;appearance:none}
+.add input,.sp input{flex:1;min-width:0;width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 12px;-webkit-appearance:none;appearance:none;transition:border-color .18s,box-shadow .18s}
+.add input:focus,.sp input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--accbg)}
 .row-form .add input{background:var(--bg)}
 .add button{background:var(--acc);color:var(--onacc);border-radius:12px;padding:0 16px;font-weight:600}
 .sp{margin-bottom:14px;padding:10px 12px}
-.chips{display:flex;gap:6px;margin-top:8px}
+.chips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .chip{padding:6px 14px;border-radius:999px;border:1px solid var(--line);font-size:14px;color:var(--mute)}
 .chip.on{background:var(--accbg);color:var(--acc);border-color:transparent}
 .empty{color:var(--mute);padding:18px 4px;text-align:center}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
-.stat b{display:block;font-size:30px;color:var(--acc);letter-spacing:-.03em;line-height:1.1}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--sh)}
+.stat b{display:block;font-size:30px;color:var(--acc);letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}
 .stat span{font-size:13px;color:var(--mute)}
 h2{font-size:14px;font-weight:600;color:var(--mute);margin:18px 4px 6px}
-.log{padding:10px 0;border-top:1px solid var(--line)}
+.dp{padding:6px}
+.dist{display:flex;align-items:center;gap:8px;width:100%;padding:9px 6px;border-radius:10px}
+.dist.on{background:var(--accbg)}
+.dn{width:104px;flex:none;font-size:14px}
+.dtrack{flex:1;height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.dtrack b{display:block;width:0;height:100%;background:var(--c);border-radius:4px;transition:width .6s var(--ease)}
+.dc{width:66px;flex:none;text-align:right;font-variant-numeric:tabular-nums;font-size:14px}
+.dc em{font-style:normal;color:var(--mute);font-size:12px;margin-left:4px}
+.fnote{margin:14px 4px 0;font-size:14px;color:var(--mute)}
+.fnote button{color:var(--acc);text-decoration:underline;text-underline-offset:3px}
+.log{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+.log .dot{margin-top:5px}
+.log div{min-width:0;overflow-wrap:anywhere}
 .log small{display:block;color:var(--mute);font-size:13px}
 .tools{display:flex;gap:16px;justify-content:center;margin-top:26px;color:var(--mute);font-size:14px}
 .tools button{text-decoration:underline;text-underline-offset:3px}
-nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line)}
-nav button{flex:1;max-width:220px;padding:12px 4px;border-radius:12px;font-weight:600;color:var(--mute)}
-nav button.on{background:var(--accbg);color:var(--acc)}
+
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 80%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.tabs{position:relative;display:grid;grid-template-columns:repeat(3,1fr);width:100%;max-width:440px;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh)}
+.pill{position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);border-radius:12px;background:var(--accbg);transition:transform .38s var(--ease)}
+.tabs button{position:relative;z-index:1;padding:11px 4px;border-radius:12px;font-weight:600;color:var(--mute);text-align:center}
+.tabs button.on{color:var(--acc)}
 .badge{display:inline-block;min-width:20px;padding:1px 6px;margin-left:6px;border-radius:10px;background:var(--acc);color:var(--onacc);font-size:12px;line-height:1.5}
+
+@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes slidein{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.5)}100%{transform:scale(1)}}
+#app.enter>*{animation:enter .42s var(--ease) both}
+#app.enter>*:nth-child(2){animation-delay:.04s}
+#app.enter>*:nth-child(3){animation-delay:.08s}
+#app.enter>*:nth-child(4){animation-delay:.12s}
+#app.enter>*:nth-child(5){animation-delay:.16s}
+#app.enter>*:nth-child(n+6){animation-delay:.2s}
+.in{animation:slidein .36s var(--ease)}
+.pop{animation:pop .42s cubic-bezier(.3,1.7,.5,1)}
+
+@media(hover:hover){
+  .row:hover{background:color-mix(in srgb,var(--acc) 6%,transparent);box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 6%,transparent)}
+  .t:hover,.chev:hover,.sb:hover,.crumbs button:hover,.tools button:hover{color:var(--acc)}
+  .chk:hover{border-color:var(--acc);transform:scale(1.1)}
+  .ic:hover,.st:hover,.lvb:hover{background:var(--accbg);color:var(--ink)}
+  .st.on:hover{color:var(--acc)}
+  .pk:hover{transform:scale(1.14)}
+  .chip:hover{border-color:var(--acc);color:var(--acc)}
+  .chip.on:hover{border-color:transparent}
+  .dist:hover{background:var(--accbg)}
+  .stat:hover{transform:translateY(-3px)}
+  .add button:hover{filter:brightness(1.1)}
+  .tabs button:hover{color:var(--ink)}
+  .tabs button.on:hover{color:var(--acc)}
+}
+.dist:active,.tabs button:active{transform:scale(.98)}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <nav>
-  <button data-a="tab" data-i="goals" id="t1">Goals</button>
-  <button data-a="tab" data-i="today" id="t2">Today</button>
-  <button data-a="tab" data-i="done" id="t3">Done</button>
+  <div class="tabs">
+    <i class="pill" id="pill"></i>
+    <button data-a="tab" data-i="goals" id="t1">Цели</button>
+    <button data-a="tab" data-i="today" id="t2">Сегодня</button>
+    <button data-a="tab" data-i="done" id="t3">Готово</button>
+  </div>
 </nav>
 <input type="file" id="file" accept="application/json" hidden>
 <script>
@@ -82,10 +146,17 @@ const K='steps.v1';
 let S;
 try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
 if(!S||!S.n)S={n:{}};
-let tab='goals',focus=null,adding=null,sOpen=false,Q='',flt='all',fx=null;
+let tab='goals',focus=null,adding=null,picking=null,sOpen=false,Q='',flt='all',dlv='all',fx=null;
+// animation state
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let anim=true,fxq=[],barW={},bigV={},lastOpen=null;
+
+const LV=['Без уровня','Очень лёгкая','Лёгкая','Средняя','Сложная','Очень сложная'];
 
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const pl=(n,f)=>{const a=n%100,b=n%10;return f[a>10&&a<20?2:b===1?0:b>1&&b<5?1:2]};
 const dk=(t=Date.now())=>{const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const kids=id=>Object.values(S.n).filter(x=>(x.p||null)===(id||null)).sort((a,b)=>a.c-b.c);
 const desc=id=>kids(id).flatMap(k=>[k,...desc(k.id)]);
@@ -100,43 +171,48 @@ function toggle(id){
 }
 function add(p,t){
   const id=Math.random().toString(36).slice(2,9);
-  S.n[id]={id,t,p:p||null,c:Date.now(),o:1,d:false,at:null,td:null};
-  if(p){const q=S.n[p];q.d=false;q.at=null;q.td=null;q.o=1}
+  S.n[id]={id,t,p:p||null,c:Date.now(),o:1,d:false,at:null,td:null,lv:0};
+  if(p){const q=S.n[p];q.d=false;q.at=null;q.td=null;q.lv=0;q.o=1}
+  return id;
 }
 function del(id){kids(id).forEach(k=>del(k.id));delete S.n[id]}
 
-const todayItems=()=>{
-  const k=dk();
-  return Object.values(S.n)
-    .filter(n=>n.td&&!kids(n.id).length&&(!n.d||(n.at&&dk(n.at)===k)))
-    .sort((a,b)=>(+!!a.d-+!!b.d)||a.c-b.c);
-};
+// A step is "in Today" if it was marked and is either still open or was finished today.
+const inToday=n=>!!n.td&&(!n.d||(!!n.at&&dk(n.at)===dk()));
+const todayItems=()=>Object.values(S.n)
+  .filter(n=>!kids(n.id).length&&inToday(n))
+  .sort((a,b)=>(+!!a.d-+!!b.d)||a.c-b.c);
+// Open steps first, finished ones below (keeps creation order inside each group).
+const ordered=id=>{const k=kids(id);return[...k.filter(x=>!isDone(x)),...k.filter(isDone)]};
 
 const SEARCH_ICON='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>';
-const star=n=>`<button class="st${n.td?' on':''}" data-a="star" data-i="${n.id}" aria-label="${n.td?'Remove from today':'Add to today'}">${n.td?'★':'☆'}</button>`;
+const star=n=>{const on=inToday(n);return `<button class="st${on?' on':''}" data-a="star" data-i="${n.id}" aria-label="${on?'Убрать из сегодняшних':'Добавить на сегодня'}">${on?'★':'☆'}</button>`};
+const lvBtn=n=>`<button class="lvb" data-a="pick" data-i="${n.id}" aria-label="Сложность: ${LV[n.lv||0].toLowerCase()}"><i class="dot l${n.lv||0}"></i></button>`;
+const picker=n=>`<div class="pick">${[0,1,2,3,4,5].map(v=>`<button class="pk l${v}${(n.lv||0)===v?' on':''}" data-a="lv" data-i="${n.id}" data-v="${v}" aria-label="${LV[v]}"></button>`).join('')}<span class="pl">${n.lv?'Сложность: '+LV[n.lv].toLowerCase():'Сложность не задана'}</span></div>`;
+const bar=(k,pct,cls='')=>`<span class="bar${cls}"><b data-k="${k}" data-w="${pct}"></b></span>`;
 
 function row(n){
   const k=kids(n.id),d=isDone(n),[a,b]=prog(n.id);
-  return `<li><div class="row${d?' done':''}">
-    <button class="chev${k.length?'':' hid'}" data-a="open" data-i="${n.id}" aria-label="Expand or collapse">${n.o?'▾':'▸'}</button>
-    <button class="chk" data-a="tog" data-i="${n.id}" aria-label="Mark done">${d?'✓':''}</button>
+  return `<li data-id="${n.id}"><div class="row${d?' done':''}">
+    <button class="chev${k.length?'':' hid'}" data-a="open" data-i="${n.id}" aria-label="Свернуть или развернуть">${n.o?'▾':'▸'}</button>
+    <button class="chk" data-a="tog" data-i="${n.id}" aria-label="Отметить выполненным">${d?'✓':''}</button>
     <span class="t" data-a="focus" data-i="${n.id}">${esc(n.t)}</span>
-    ${k.length?`<span class="cnt">${a}/${b}</span>`:star(n)}
-    <button class="ic" data-a="add" data-i="${n.id}" aria-label="Add step">+</button>
-    <button class="ic" data-a="del" data-i="${n.id}" aria-label="Delete">×</button>
-  </div>${k.length?`<span class="bar"><b style="width:${Math.round(a/b*100)}%"></b></span>`:''}
-  ${k.length&&n.o?`<ul>${k.map(row).join('')}</ul>`:''}
-  ${adding===n.id?`<div class="row-form">${form(n.id,'New step','row')}</div>`:''}</li>`;
+    ${k.length?`<span class="cnt">${a}/${b}</span>`:lvBtn(n)+star(n)}
+    <button class="ic" data-a="add" data-i="${n.id}" aria-label="Добавить шаг">+</button>
+    <button class="ic" data-a="del" data-i="${n.id}" aria-label="Удалить">×</button>
+  </div>${!k.length&&picking===n.id?picker(n):''}${k.length?bar(n.id,Math.round(a/b*100)):''}
+  ${k.length&&n.o?`<ul>${ordered(n.id).map(row).join('')}</ul>`:''}
+  ${adding===n.id?`<div class="row-form">${form(n.id,'Новый шаг','row')}</div>`:''}</li>`;
 }
-const form=(p,ph,kind)=>`<form class="add ${kind}" data-k="${kind}" data-p="${p||''}"><input placeholder="${ph}" enterkeyhint="done" autocomplete="off"><button>Add</button></form>`;
+const form=(p,ph,kind)=>`<form class="add ${kind}" data-k="${kind}" data-p="${p||''}"><input placeholder="${ph}" enterkeyhint="done" autocomplete="off"><button>Добавить</button></form>`;
 
 function resRow(n){
   const d=isDone(n),leaf=!kids(n.id).length,pa=path(n);
-  return `<li><div class="row${d?' done':''}">
-    <button class="chk" data-a="tog" data-i="${n.id}" aria-label="Mark done">${d?'✓':''}</button>
+  return `<li data-id="${n.id}"><div class="row${d?' done':''}">
+    <button class="chk" data-a="tog" data-i="${n.id}" aria-label="Отметить выполненным">${d?'✓':''}</button>
     <div class="tt"><span class="t" data-a="go" data-i="${n.id}">${esc(n.t)}</span>${pa?`<small>${esc(pa)}</small>`:''}</div>
-    ${leaf?star(n):''}
-  </div></li>`;
+    ${leaf?lvBtn(n)+star(n):''}
+  </div>${leaf&&picking===n.id?picker(n):''}</li>`;
 }
 
 const searching=()=>sOpen&&(Q.trim()||flt!=='all');
@@ -148,105 +224,174 @@ function matches(){
     if(flt==='active')return !isDone(n);
     if(flt==='done')return isDone(n);
     return true;
-  }).sort((a,b)=>(path(a)+' › '+a.t).localeCompare(path(b)+' › '+b.t));
+  }).sort((a,b)=>(path(a)+' › '+a.t).localeCompare(path(b)+' › '+b.t,'ru'));
 }
 
 function body(){
   const f=focus&&S.n[focus];
   if(searching()){
     const m=matches();
-    return `<h2>${m.length} ${m.length===1?'match':'matches'}</h2>`+
-      (m.length?`<div class="panel"><ul>${m.map(resRow).join('')}</ul></div>`:'<div class="empty">Nothing found. Try another word or filter.</div>');
+    return `<h2>Найдено: ${m.length}</h2>`+
+      (m.length?`<div class="panel"><ul>${m.map(resRow).join('')}</ul></div>`:'<div class="empty">Ничего не найдено. Попробуйте другое слово или фильтр.</div>');
   }
-  const k=kids(f?f.id:null);
+  const k=ordered(f?f.id:null);
   return k.length?`<div class="panel"><ul>${k.map(row).join('')}</ul></div>`
-    :`<div class="empty">${f?'No steps yet. Break this into smaller steps.':'No goals yet. Add your first goal above.'}</div>`;
+    :`<div class="empty">${f?'Пока нет шагов. Разбейте эту цель на небольшие шаги.':'Пока нет целей. Добавьте первую цель выше.'}</div>`;
 }
 
 function goals(){
   const f=focus&&S.n[focus];
-  let h=`<div class="topbar">${form(f?f.id:'',f?'Add a step to this goal':'Add a new goal','top')}
-    <button class="sb${sOpen?' on':''}" data-a="srch" aria-label="Search and filter">${SEARCH_ICON}</button></div>`;
+  let h=`<div class="topbar">${form(f?f.id:'',f?'Добавить шаг в эту цель':'Новая цель','top')}
+    <button class="sb${sOpen?' on':''}" data-a="srch" aria-label="Поиск и фильтр">${SEARCH_ICON}</button></div>`;
   if(sOpen){
-    h+=`<div class="panel sp"><input id="q" type="search" placeholder="${f?'Search in this goal':'Search all goals'}" value="${esc(Q)}" enterkeyhint="search" autocomplete="off" autocapitalize="off">
-    <div class="chips">${[['all','All'],['active','Active'],['done','Done']].map(([v,l])=>`<button class="chip${flt===v?' on':''}" data-a="flt" data-i="${v}">${l}</button>`).join('')}</div></div>`;
+    h+=`<div class="panel sp"><input id="q" type="search" placeholder="${f?'Поиск в этой цели':'Поиск по всем целям'}" value="${esc(Q)}" enterkeyhint="search" autocomplete="off" autocapitalize="off">
+    <div class="chips">${[['all','Все'],['active','Активные'],['done','Выполненные']].map(([v,l])=>`<button class="chip${flt===v?' on':''}" data-a="flt" data-i="${v}">${l}</button>`).join('')}</div></div>`;
   }
   if(f){
-    const crumbs=['<button data-a="focus" data-i="">All goals</button>'];
+    const crumbs=['<button data-a="focus" data-i="">Все цели</button>'];
     let c=f,anc=[];while(c.p&&S.n[c.p]){c=S.n[c.p];anc.unshift(c)}
     anc.forEach(x=>crumbs.push(`<button data-a="focus" data-i="${x.id}">${esc(x.t)}</button>`));
-    const[a,b]=prog(f.id);
+    const[a,b]=prog(f.id),pct=Math.round(a/b*100);
     h+=`<div class="crumbs">${crumbs.join('<span>/</span>')}</div><h1>${esc(f.t)}</h1>
-    <div class="sum"><span class="big">${Math.round(a/b*100)}%</span><span>${a} of ${b} steps done</span></div>`;
+    <div class="sum"><span class="big" data-n="${pct}" data-s="%" data-k="g${f.id}">${pct}%</span><span>${a} из ${b} ${b%10===1&&b%100!==11?'шага':'шагов'} выполнено</span></div>`;
   }else{
     const all=kids(null).flatMap(x=>leaves(x.id));
     const a=all.filter(x=>x.d).length;
-    h+=`<h1>Goals</h1><div class="sum"><span class="big">${a}</span><span>${a===1?'step':'steps'} done so far</span></div>`;
+    h+=`<h1>Цели</h1><div class="sum"><span class="big" data-n="${a}" data-s="" data-k="g">${a}</span><span>${pl(a,['шаг выполнен','шага выполнено','шагов выполнено'])}</span></div>`;
   }
   return h+`<div id="res">${body()}</div>`;
 }
 
 function todayRow(n){
   const d=!!n.d,old=n.td<dk()&&!d,pa=path(n);
-  const sub=[pa,old?'carried over from '+new Date(n.td+'T12:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short'}):''].filter(Boolean).join(' · ');
-  return `<li><div class="row${d?' done':''}">
-    <button class="chk" data-a="tog" data-i="${n.id}" aria-label="Mark done">${d?'✓':''}</button>
+  const sub=[pa,old?'перенесено с '+new Date(n.td+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'short'}):''].filter(Boolean).join(' · ');
+  return `<li data-id="${n.id}"><div class="row${d?' done':''}">
+    <button class="chk" data-a="tog" data-i="${n.id}" aria-label="Отметить выполненным">${d?'✓':''}</button>
     <div class="tt"><span class="t" data-a="go" data-i="${n.id}">${esc(n.t)}</span>${sub?`<small>${esc(sub)}</small>`:''}</div>
-    ${star(n)}
-  </div></li>`;
+    ${lvBtn(n)}${star(n)}
+  </div>${picking===n.id?picker(n):''}</li>`;
 }
 
 function todayTab(){
   const l=todayItems(),b=l.length,a=l.filter(x=>x.d).length;
-  let h=`<h1>Today</h1><div class="crumbs">${new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}</div>
-  <div class="sum"><span class="big">${a}/${b}</span><span>done today</span></div>`;
-  if(!b)return h+'<div class="empty">Nothing planned for today.<br>In Goals, tap ☆ next to a step to add it here.</div>';
-  return h+`<span class="bar full"><b style="width:${Math.round(a/b*100)}%"></b></span><div class="panel"><ul>${l.map(todayRow).join('')}</ul></div>`;
+  let h=`<h1>Сегодня</h1><div class="crumbs">${cap(new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'}))}</div>
+  <div class="sum"><span class="big">${a}/${b}</span><span>выполнено сегодня</span></div>`;
+  if(!b)return h+'<div class="empty">На сегодня ничего не запланировано.<br>В разделе «Цели» нажмите ☆ рядом с шагом, чтобы добавить его сюда.</div>';
+  return h+bar('today',Math.round(a/b*100),' full')+`<div class="panel"><ul>${l.map(todayRow).join('')}</ul></div>`;
 }
 
 function doneTab(){
-  const l=Object.values(S.n).filter(n=>!kids(n.id).length&&n.d&&n.at).sort((a,b)=>b.at-a.at);
+  const all=Object.values(S.n).filter(n=>!kids(n.id).length&&n.d&&n.at).sort((a,b)=>b.at-a.at);
   const day=t=>new Date(t).toDateString(),now=Date.now();
-  const today=l.filter(n=>day(n.at)===day(now)).length;
-  const week=l.filter(n=>now-n.at<6048e5).length;
-  let h=`<h1>Done</h1><div class="sum"><span>Everything you've finished, newest first.</span></div>
-  <div class="stats"><div class="stat"><b>${today}</b><span>today</span></div><div class="stat"><b>${week}</b><span>last 7 days</span></div><div class="stat"><b>${l.length}</b><span>total</span></div></div>`;
-  if(!l.length)h+='<div class="empty">Nothing yet. Finished steps will show up here.</div>';
+  const today=all.filter(n=>day(n.at)===day(now)).length;
+  const week=all.filter(n=>now-n.at<6048e5).length;
+  const tot=all.length,cnt=[0,0,0,0,0,0];
+  all.forEach(n=>cnt[n.lv||0]++);
+  const tools='<div class="tools"><button data-a="exp">Экспорт копии</button><button data-a="imp">Импорт копии</button></div>';
+  const st=(v,k,l)=>`<div class="stat"><b data-n="${v}" data-s="" data-k="${k}">${v}</b><span>${l}</span></div>`;
+  let h=`<h1>Готово</h1><div class="sum"><span>Всё, что вы сделали: новое сверху.</span></div>
+  <div class="stats">${st(today,'s0','сегодня')}${st(week,'s1','за 7 дней')}${st(tot,'s2','всего')}</div>`;
+  if(!tot)return h+'<div class="empty">Пока ничего. Выполненные шаги появятся здесь.</div>'+tools;
+  h+=`<h2>По сложности</h2><div class="panel dp">${[1,2,3,4,5,0].filter(v=>v||cnt[0]).map(v=>{
+    const w=cnt[v]?Math.max(3,Math.round(cnt[v]/tot*100)):0;
+    return `<button class="dist l${v}${dlv===String(v)?' on':''}" data-a="dlv" data-i="${v}"><i class="dot l${v}"></i><span class="dn">${LV[v]}</span><span class="dtrack"><b data-k="d${v}" data-w="${w}"></b></span><span class="dc">${cnt[v]}<em>${Math.round(cnt[v]/tot*100)}%</em></span></button>`;
+  }).join('')}</div>`;
+  const l=dlv==='all'?all:all.filter(n=>(n.lv||0)===+dlv);
+  if(dlv!=='all')h+=`<div class="fnote">Показано: ${LV[+dlv].toLowerCase()} · <button data-a="dlv" data-i="all">показать все</button></div>`;
+  if(!l.length)h+='<div class="empty">Нет выполненных шагов этого уровня.</div>';
   let last='';
   l.forEach(n=>{
     const d=day(n.at);
-    if(d!==last){last=d;h+=`<h2>${new Date(n.at).toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'})}</h2>`}
-    h+=`<div class="log">${esc(n.t)}${path(n)?`<small>${esc(path(n))}</small>`:''}</div>`;
+    if(d!==last){last=d;h+=`<h2>${cap(new Date(n.at).toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'short'}))}</h2>`}
+    h+=`<div class="log"><i class="dot l${n.lv||0}"></i><div>${esc(n.t)}${path(n)?`<small>${esc(path(n))}</small>`:''}</div></div>`;
   });
-  return h+`<div class="tools"><button data-a="exp">Export backup</button><button data-a="imp">Import backup</button></div>`;
+  return h+tools;
+}
+
+function countTo(el,from,to,suf){
+  if(reduce||from===to){el.textContent=to+suf;return}
+  el.textContent=from+suf;
+  const t0=performance.now();
+  const step=t=>{
+    const p=Math.min(1,(t-t0)/500),e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(from+(to-from)*e)+suf;
+    if(p<1)requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
 }
 
 function render(){
-  document.getElementById('app').innerHTML=tab==='goals'?goals():tab==='today'?todayTab():doneTab();
+  const app=document.getElementById('app');
+  // remember where list items are, so they can slide to their new place (e.g. a finished step moving down)
+  const first={};
+  if(!anim&&!reduce)app.querySelectorAll('li[data-id]').forEach(li=>first[li.dataset.id]=li.getBoundingClientRect().top);
+
+  app.innerHTML=tab==='goals'?goals():tab==='today'?todayTab():doneTab();
+  app.className=anim&&!reduce?'enter':'';
+
   const open=todayItems().filter(x=>!x.d).length;
   t1.className=tab==='goals'?'on':'';
   t2.className=tab==='today'?'on':'';
-  t2.innerHTML='Today'+(open?`<span class="badge">${open}</span>`:'');
+  t2.innerHTML='Сегодня'+(open?`<span class="badge">${open}</span>`:'');
   t3.className=tab==='done'?'on':'';
+  pill.style.transform=`translateX(${['goals','today','done'].indexOf(tab)*100}%)`;
+  if(lastOpen!==null&&open!==lastOpen&&open)fxq.push(['#t2 .badge','pop']);
+  lastOpen=open;
+
+  // one-off effects requested by the last action
+  fxq.forEach(([sel,cls])=>{const el=app.querySelector(sel)||document.querySelector(sel);if(el)el.classList.add(cls)});
+  fxq=[];
+
+  // progress bars grow from their previous width (or from zero when a page opens)
+  app.querySelectorAll('[data-w]').forEach(b=>{
+    const k=b.dataset.k,to=+b.dataset.w,from=anim?0:(barW[k]??0);
+    barW[k]=to;
+    if(reduce||from===to){b.style.width=to+'%';return}
+    b.style.width=from+'%';
+    b.getBoundingClientRect();
+    b.style.width=to+'%';
+  });
+
+  // numbers count up
+  app.querySelectorAll('[data-n]').forEach(el=>{
+    const k=el.dataset.k,to=+el.dataset.n,from=anim?0:(bigV[k]??to);
+    bigV[k]=to;
+    countTo(el,from,to,el.dataset.s||'');
+  });
+
+  // list items glide to new positions
+  if(!anim&&!reduce){
+    const lis=[...app.querySelectorAll('li[data-id]')],d=new Map();
+    lis.forEach(li=>{const f=first[li.dataset.id];d.set(li,f==null?0:f-li.getBoundingClientRect().top)});
+    lis.forEach(li=>{
+      const p=li.parentElement.closest('li'),v=d.get(li)-(p?d.get(p):0);
+      if(Math.abs(v)>1)li.animate([{transform:`translateY(${v}px)`},{transform:'none'}],{duration:340,easing:'cubic-bezier(.3,.9,.3,1)'});
+    });
+  }
+
+  anim=false;
   if(fx){const el=document.querySelector(fx);if(el)el.focus();fx=null}
 }
 
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-a]');if(!b)return;
   const a=b.dataset.a,i=b.dataset.i,n=S.n[i];
-  if(a==='tab'){tab=i;adding=null}
-  else if(a==='open')n.o=n.o?0:1;
-  else if(a==='tog')toggle(i);
-  else if(a==='star')n.td=n.td?null:dk();
-  else if(a==='focus'){focus=i||null;adding=null;scrollTo(0,0)}
-  else if(a==='go'){focus=kids(i).length?i:(n.p||null);sOpen=false;Q='';flt='all';tab='goals';adding=null;scrollTo(0,0)}
-  else if(a==='add'){adding=adding===i?null:i;n.o=1;if(adding)fx='.add.row input'}
-  else if(a==='srch'){sOpen=!sOpen;if(sOpen)fx='#q';else{Q='';flt='all'}}
+  if(a==='tab'){if(tab!==i)anim=true;tab=i;adding=null;picking=null}
+  else if(a==='open'){n.o=n.o?0:1;if(n.o)fxq.push([`li[data-id="${i}"]>ul`,'in'])}
+  else if(a==='tog'){toggle(i);if(isDone(S.n[i]))fxq.push([`[data-a="tog"][data-i="${i}"]`,'pop'])}
+  else if(a==='star'){n.td=inToday(n)?null:dk();if(inToday(n))fxq.push([`[data-a="star"][data-i="${i}"]`,'pop'])}
+  else if(a==='pick'){picking=picking===i?null:i;if(picking)fxq.push([`li[data-id="${i}"] .pick`,'in'])}
+  else if(a==='lv'){n.lv=+b.dataset.v;picking=null;fxq.push([`[data-a="pick"][data-i="${i}"] .dot`,'pop'])}
+  else if(a==='dlv')dlv=(i==='all'||dlv===i)?'all':i;
+  else if(a==='focus'){focus=i||null;adding=null;picking=null;anim=true;scrollTo(0,0)}
+  else if(a==='go'){focus=kids(i).length?i:(n.p||null);sOpen=false;Q='';flt='all';tab='goals';adding=null;picking=null;anim=true;scrollTo(0,0)}
+  else if(a==='add'){adding=adding===i?null:i;n.o=1;if(adding){fx='.add.row input';fxq.push(['.row-form','in'])}}
+  else if(a==='srch'){sOpen=!sOpen;if(sOpen){fx='#q';fxq.push(['.sp','in'])}else{Q='';flt='all'}}
   else if(a==='flt')flt=i;
   else if(a==='del'){
-    const c=desc(i).length?` and its ${desc(i).length} sub-steps`:'';
-    if(!confirm(`Delete "${n.t}"${c}?`))return;
-    del(i);if(focus&&!S.n[focus])focus=null;
+    const c=desc(i).length?` и все вложенные шаги (${desc(i).length})`:'';
+    if(!confirm(`Удалить «${n.t}»${c}?`))return;
+    del(i);if(focus&&!S.n[focus])focus=null;picking=null;
   }
   else if(a==='exp'){
     const u=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));
@@ -269,7 +414,8 @@ document.addEventListener('submit',e=>{
   e.preventDefault();
   const f=e.target,t=f.querySelector('input').value.trim();
   if(!t)return;
-  add(f.dataset.p||null,t);
+  const id=add(f.dataset.p||null,t);
+  fxq.push([`li[data-id="${id}"]`,'in']);
   fx=f.dataset.k==='top'?'.add.top input':'.add.row input';
   save();render();
 });
@@ -279,8 +425,8 @@ file.addEventListener('change',()=>{
   const r=new FileReader();
   r.onload=()=>{
     try{const d=JSON.parse(r.result);if(!d.n)throw 0;
-      if(confirm('Replace your current data with this backup?')){S=d;focus=null;adding=null;save();render()}
-    }catch(e){alert('This file is not a valid backup.')}
+      if(confirm('Заменить текущие данные этой резервной копией?')){S=d;focus=null;adding=null;picking=null;anim=true;save();render()}
+    }catch(e){alert('Этот файл не является корректной резервной копией.')}
     file.value='';
   };
   r.readAsText(f);
